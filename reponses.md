@@ -42,3 +42,4 @@ Q4.4 : Comme les cartes ont déjà des marges entre elles, le séparateur ne ser
 Q4.5 : Sans Clip.antiAlias, l'effet d'encre dépasse dans les coins arrondis de la carte. Avec, il reste bien à l'intérieur.
 
 Q4.8 : DetailScreen doit être un StatefulWidget parce que quand on clique sur "Ajouter aux favoris", l'icône du cœur doit changer à l'écran.
+
