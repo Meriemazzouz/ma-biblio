@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-
-import '../data/livres_data.dart';
 import '../models/livre.dart';
 
 class MaListeScreen extends StatefulWidget {
-  const MaListeScreen({super.key});
+  final List<Livre> livres;
+  final VoidCallback? onModifie;
+
+  const MaListeScreen({super.key, required this.livres, this.onModifie});
 
   @override
   State<MaListeScreen> createState() => _MaListeScreenState();
@@ -44,11 +45,11 @@ class _MaListeScreenState extends State<MaListeScreen> {
   }
 
   int _nombreLivres(String genre) {
-    return livres.where((livre) => livre.genre == genre).length;
+    return widget.livres.where((livre) => livre.genre == genre).length;
   }
 
   List<Livre> get _livresAffiches {
-    return livres
+    return widget.livres
         .where((livre) => _genres[livre.genre] == true)
         .where((livre) => !_nouveautesSeulement || livre.nouveaute)
         .toList();
@@ -77,7 +78,10 @@ class _MaListeScreenState extends State<MaListeScreen> {
           const Divider(height: 1),
 
           CheckboxListTile(
-            title: const Text('Tous les genres', style: TextStyle(fontWeight: FontWeight.bold)),
+            title: const Text(
+              'Tous les genres',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
             tristate: true,
             value: _tousLesGenres,
             controlAffinity: ListTileControlAffinity.leading,
@@ -128,6 +132,7 @@ class _MaListeScreenState extends State<MaListeScreen> {
                     setState(() {
                       livre.lu = valeur ?? false;
                     });
+                    widget.onModifie?.call();
                   },
                 );
               },

@@ -44,3 +44,10 @@ Q4.5 : Sans Clip.antiAlias, l'effet d'encre dépasse dans les coins arrondis de 
 Q4.8 : DetailScreen doit être un StatefulWidget parce que quand on clique sur "Ajouter aux favoris", l'icône du cœur doit changer à l'écran.
 
 Q6.3 : Avec SliverGridDelegateWithMaxCrossAxisExtent, on retrouve le même comportement que GridView.extent : on donne une largeur maximale et le nombre de colonnes s'adapte tout seul.
+
+Q7.2 : Si l'indentation de assets n'est pas bonne, flutter pub get donne une erreur ou le fichier n'est pas trouvé au lancement ("Unable to load asset").
+
+Q7.4 : La fonction est async parce que lire un fichier prend un peu de temps. Comme ça, l'application ne se bloque pas pendant le chargement et on voit le cercle de chargement.
+
+Q7.6 : J'ai ajouté un livre dans le JSON et il est apparu sans toucher au code Dart. C'est plus pratique pour modifier les données.
+

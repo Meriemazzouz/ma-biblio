@@ -1,7 +1,38 @@
 import 'package:flutter/material.dart';
 
 class ParametresScreen extends StatelessWidget {
-  const ParametresScreen({super.key});
+  final Future<void> Function()? onReinitialiser;
+
+  const ParametresScreen({super.key, this.onReinitialiser});
+
+  Future<void> _confirmer(BuildContext context) async {
+    final confirme = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Réinitialiser ma bibliothèque ?'),
+        content: const Text('Les livres lus et les favoris seront effacés.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Annuler'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Réinitialiser'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirme == true) {
+      await onReinitialiser?.call();
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Bibliothèque réinitialisée')),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,9 +73,17 @@ class ParametresScreen extends StatelessWidget {
             ),
 
             ListTile(
+              leading: const Icon(Icons.restart_alt),
+              title: const Text('Réinitialiser ma bibliothèque'),
+              onTap: () => _confirmer(context),
+            ),
+
+            ListTile(
               leading: const Icon(Icons.info),
               title: const Text('À propos'),
-              subtitle: const Text('MaBiblio version 1.0\nTP Listes et grilles avec Flutter'),
+              subtitle: const Text(
+                'MaBiblio version 1.0\nTP Listes et grilles avec Flutter',
+              ),
               dense: true,
               isThreeLine: true,
             ),

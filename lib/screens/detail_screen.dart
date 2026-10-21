@@ -3,8 +3,9 @@ import '../models/livre.dart';
 
 class DetailScreen extends StatefulWidget {
   final Livre livre;
+  final VoidCallback? onModifie;
 
-  const DetailScreen({super.key, required this.livre});
+  const DetailScreen({super.key, required this.livre, this.onModifie});
 
   @override
   State<DetailScreen> createState() => _DetailScreenState();
@@ -22,7 +23,9 @@ class _DetailScreenState extends State<DetailScreen> {
         child: Card(
           elevation: 4,
           clipBehavior: Clip.antiAlias,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
           child: Column(
             children: [
               Container(
@@ -71,21 +74,33 @@ class _DetailScreenState extends State<DetailScreen> {
                         livre.favori ? Icons.favorite : Icons.favorite_border,
                         color: Colors.red,
                       ),
-                      label: Text(livre.favori ? 'Retirer des favoris' : 'Ajouter aux favoris'),
+                      label: Text(
+                        livre.favori
+                            ? 'Retirer des favoris'
+                            : 'Ajouter aux favoris',
+                      ),
                       onPressed: () {
                         setState(() {
                           livre.favori = !livre.favori;
                         });
+                        widget.onModifie?.call();
                       },
                     ),
 
                     TextButton.icon(
-                      icon: Icon(livre.lu ? Icons.check_circle : Icons.check_circle_outline),
-                      label: Text(livre.lu ? 'Marquer comme non lu' : 'Marquer comme lu'),
+                      icon: Icon(
+                        livre.lu
+                            ? Icons.check_circle
+                            : Icons.check_circle_outline,
+                      ),
+                      label: Text(
+                        livre.lu ? 'Marquer comme non lu' : 'Marquer comme lu',
+                      ),
                       onPressed: () {
                         setState(() {
                           livre.lu = !livre.lu;
                         });
+                        widget.onModifie?.call();
                       },
                     ),
                   ],

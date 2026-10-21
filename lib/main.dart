@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'data/livres_data.dart';
+import 'models/livre.dart';
 import 'screens/catalogue_screen.dart';
 import 'screens/galerie_screen.dart';
 import 'screens/ma_liste_screen.dart';
 import 'screens/parametres_screen.dart';
+import 'services/livre_service.dart';
 
 void main() => runApp(const MaBiblioApp());
 
@@ -30,6 +31,34 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late Future<List<Livre>> _futureLivres;
+  List<Livre> _livres = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _futureLivres = LivreService.chargerLivres();
+  }
+
+  void _sauvegarder() {
+    LivreService.sauvegarderLivres(_livres);
+  }
+
+  Future<void> _reinitialiser() async {
+    await LivreService.reinitialiser();
+    setState(() {
+      _futureLivres = LivreService.chargerLivres();
+    });
+  }
+
+  Future<void> _ouvrir(Widget ecran) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ecran),
+    );
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,42 +67,46 @@ class _HomePageState extends State<HomePage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.grid_view),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => GalerieScreen(livres: livres),
-                ),
-              );
-            },
+            onPressed: () => _ouvrir(
+              GalerieScreen(livres: _livres, onModifie: _sauvegarder),
+            ),
           ),
 
           IconButton(
             icon: const Icon(Icons.checklist),
-            onPressed: () async {
-              await Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const MaListeScreen()),
-              );
-              setState(() {});
-            },
+            onPressed: () => _ouvrir(
+              MaListeScreen(livres: _livres, onModifie: _sauvegarder),
+            ),
           ),
 
           IconButton(
             icon: const Icon(Icons.settings),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const ParametresScreen(),
-                ),
-              );
-            },
+            onPressed: () =>
+                _ouvrir(ParametresScreen(onReinitialiser: _reinitialiser)),
           ),
         ],
       ),
 
-      body: CatalogueScreen(livres: livres),
+      body: FutureBuilder<List<Livre>>(
+        future: _futureLivres,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.hasError) {
+            return Center(
+              child: Text(
+                'Erreur : ${snapshot.error}',
+                style: const TextStyle(color: Colors.red),
+              ),
+            );
+          }
+
+          _livres = snapshot.data!;
+          return CatalogueScreen(livres: _livres, onModifie: _sauvegarder);
+        },
+      ),
     );
   }
 }
