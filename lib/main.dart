@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'data/livres_data.dart';
+import 'screens/parametres_screen.dart';
+import 'widgets/livre_card.dart';
+
 void main() => runApp(const MaBiblioApp());
 
 class MaBiblioApp extends StatelessWidget {
@@ -27,8 +31,28 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('MaBiblio')),
-      body: const Center(child: Text('Bienvenue dans MaBiblio')),
+      appBar: AppBar(
+        title: const Text('MaBiblio'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ParametresScreen()),
+              );
+            },
+          ),
+        ],
+      ),
+
+      body: Column(
+        children: [
+          livreTile(livres[0]),
+          livreTile(livres[1]),
+          livreTile(livres[2]),
+        ],
+      ),
     );
   }
 }
