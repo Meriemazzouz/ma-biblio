@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'data/livres_data.dart';
+import 'screens/catalogue_screen.dart';
 import 'screens/parametres_screen.dart';
-import 'widgets/livre_card.dart';
 
 void main() => runApp(const MaBiblioApp());
 
@@ -39,20 +38,16 @@ class _HomePageState extends State<HomePage> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const ParametresScreen()),
+                MaterialPageRoute(
+                  builder: (context) => const ParametresScreen(),
+                ),
               );
             },
           ),
         ],
       ),
 
-      body: Column(
-        children: [
-          livreTile(livres[0]),
-          livreTile(livres[1]),
-          livreTile(livres[2]),
-        ],
-      ),
+      body: const CatalogueScreen(),
     );
   }
 }
