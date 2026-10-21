@@ -8,10 +8,7 @@ Widget livreTile(Livre livre, {VoidCallback? onTap}) {
       backgroundColor: livre.couleur,
       child: Text(
         livre.titre[0],
-        style: const TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-        ),
+        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
       ),
     ),
     title: Text(livre.titre),

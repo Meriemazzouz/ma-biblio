@@ -3,9 +3,8 @@ import '../models/livre.dart';
 
 class DetailScreen extends StatefulWidget {
   final Livre livre;
-  final VoidCallback? onModifie;
 
-  const DetailScreen({super.key, required this.livre, this.onModifie});
+  const DetailScreen({super.key, required this.livre});
 
   @override
   State<DetailScreen> createState() => _DetailScreenState();
@@ -77,7 +76,6 @@ class _DetailScreenState extends State<DetailScreen> {
                         setState(() {
                           livre.favori = !livre.favori;
                         });
-                        widget.onModifie?.call();
                       },
                     ),
 
@@ -88,7 +86,6 @@ class _DetailScreenState extends State<DetailScreen> {
                         setState(() {
                           livre.lu = !livre.lu;
                         });
-                        widget.onModifie?.call();
                       },
                     ),
                   ],

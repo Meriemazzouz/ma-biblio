@@ -6,9 +6,8 @@ import 'detail_screen.dart';
 
 class CatalogueScreen extends StatefulWidget {
   final List<Livre> livres;
-  final VoidCallback? onModifie;
 
-  const CatalogueScreen({super.key, required this.livres, this.onModifie});
+  const CatalogueScreen({super.key, required this.livres});
 
   @override
   State<CatalogueScreen> createState() => _CatalogueScreenState();
@@ -18,9 +17,7 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
   Future<void> _ouvrirDetail(Livre livre) async {
     await Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => DetailScreen(livre: livre, onModifie: widget.onModifie),
-      ),
+      MaterialPageRoute(builder: (context) => DetailScreen(livre: livre)),
     );
     setState(() {});
   }
